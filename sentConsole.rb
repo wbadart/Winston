@@ -15,6 +15,7 @@ commands = {
 	intro: "Reprints the welcome message.",
 	list: "Lists all sentences in the database.\n    Use '-a' argument to also list data.",
 	quit: "Exit the console."
+	synth: "Enter Sentence Syntheiszer."
 }
 
 
@@ -89,6 +90,12 @@ loop do
 		when /data/
 			puts "Loading Data Analytics Console..."
 			require_relative 'wordAnalytics'
+			puts "Loading Sentence Command Console..."
+			puts welcome
+			
+		when /synth/
+			puts "Loading Sentence Synthesizer..."
+			require_relative 'synth'
 			puts "Loading Sentence Command Console..."
 			puts welcome
 			

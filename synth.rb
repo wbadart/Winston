@@ -1,5 +1,8 @@
 require_relative 'classes'
 f = ['dictionary', 'sentences']
+puts "Welcome to the Sentence Synthesizer.  Type 'quit' at any time to leave. First input is sentence length. Second is method. Method 1 uses a simple mode analysis and Method 2 uses score generation with chaos."
+puts ""
+
 
 
 loop do
@@ -10,10 +13,23 @@ loop do
 	method = gets.chomp.strip.downcase
 	list = load(f[0])
 	sent = []
-
+	paramLog = load('parameter_log')
+	def useOld(i)
+		return paramLog[i]
+	end
+	
 	case method
 		when /quit/
 			break
+			
+		when /param/
+			i = 0
+			paramLog.each do |k, v|
+				puts "======[#{i}]======"
+				puts "#{k}: #{v}"
+				puts ""
+				i += 1
+			end
 		
 		when /1/
 			len.times do |i|
@@ -32,6 +48,32 @@ loop do
 			end
 			
 		when /2/
+			print "Use parameter set (blank to enter new values: "
+			use = gets.chomp.strip
+			if use.empty?
+				print "\nNon-mode disadvantage (0-100): "
+				modeW = (100 - gets.chomp.strip.to_i) / 100
+				print "\nFrequency advantage (0-100): "
+				lenW = gets.chomp.strip.to_i / 100000
+				print "\nRandom min(0-100): "
+				randmin = gets.chomp.strip.to_i / 10
+				print "\nRandom max (0-100): "
+				randmax = gets.chomp.strip.to_i
+				params = {
+					modeW: modeW,
+					lenW: lenW,
+					randmin: randmin,
+					randmax: randmax
+				}
+				paramLog.push(params)
+				save(paramLog, 'parameter_log')
+			else
+				params = paramLog[use.to_i]
+				modeW = params[:modeW]
+				lenW = params[:lenW]
+				randmin = params[:randmin]
+				randmax = params[:randmax]
+			end
 			len.times do |i|
 				data = []
 				sigmas = []
@@ -42,19 +84,20 @@ loop do
 						sigmas.push(standarddev(item.data))
 					end
 				end
-				scores = Array.new(data.length){0}
 				max = 0
 				k = 0
-				maxSig = max(sigmas) + 0.0001
+				maxSig = max(sigmas) + 0.0000001
 				data.each do |n|
 					set = n.data
-					mode(set) == i ? score = 1 : score = 0.2
-					score += set.length * 0.001
+					if modeW > 0
+						mode(set) == i ? score = 1 : score = modeW
+					else
+						score = 1
+					end
+					score += set.length * lenW
 					nMult = standarddev(set)
-					nMult += 0.0001 if nMult == 0
 					score *= 1 - nMult / maxSig
-					score*= rand(90) + 10
-					puts "pos: #{i}, word: #{n.string}, score: #{score}"
+					score*= rand(randmax - randmin) + randmin
 					if score > max
 						max = score
 						$maxIn = k
@@ -69,6 +112,6 @@ loop do
 	sent = sent.join(" ").strip.capitalize
 	sent[sent.length] = "."
 
-	puts sent
+	puts sent if sent.length > 1
 	
 end
