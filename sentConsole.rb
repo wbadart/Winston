@@ -14,7 +14,7 @@ commands = {
 	help: "List all availible commands.",
 	intro: "Reprints the welcome message.",
 	list: "Lists all sentences in the database.\n    Use '-a' argument to also list data.",
-	quit: "Exit the console."
+	quit: "Exit the console.",
 	synth: "Enter Sentence Syntheiszer."
 }
 
