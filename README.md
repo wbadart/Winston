@@ -1,4 +1,4 @@
 # Winston
-An exercise in machine learning with Ruby.
+An exercise in proto machine learning with Ruby.
 
 Winston is a friendly guy who reads the paper every morning.  In fact, he reads the paper so much, that his entire vocabulary consists only of words he read there! After feeding him several articles, you can have Winston make some sentences for you. He'll analyze input (both single and multi-line, the latter of which is how he reads the paper) and generate data on the placement of each word in the sentece.  When you want him to produce a sentence, he'll use that data and a set of given parameters to generate a score for each word in relation to the position in the sentence. His grammar might be reminiscent of a toddler, but his vocabulary is impressive: over 4000 words inhereted directly from the talented journalists at the New York Times! Stay tuned for further updates.
