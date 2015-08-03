@@ -1,3 +1,5 @@
+def dictConsole
+
 require_relative 'classes'
 f = 'dictionary'
 log = []
@@ -175,10 +177,13 @@ loop do
 			
 		#===A winner don't never quit===#
 		when /quit/
+			return true if usrArr[1] = '-a'
 			break
 			
 		else
 			log = error(101, errors, log) if usrIn != "init"
 	end
 	puts ""
+end
+
 end

@@ -1,3 +1,5 @@
+def wordAnalytics
+
 require_relative 'classes'
 
 puts "\nData Analytics Console. Enter 'help' to get started."
@@ -35,6 +37,7 @@ loop do
 			end
 			
 		when /quit/
+			return true if usrArr[1] = '-a'
 			break
 			
 		else
@@ -42,4 +45,6 @@ loop do
 			
 	end
 	puts ""
+end
+
 end

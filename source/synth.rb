@@ -1,3 +1,5 @@
+def synth
+
 require_relative 'classes'
 f = ['dictionary', 'sentences']
 puts "\nWelcome to the Sentence Synthesizer.  Type 'quit' at any time to leave. First input is sentence length. Second is method. Method 1 uses a simple mode analysis and Method 2 uses score generation with chaos."
@@ -28,6 +30,7 @@ loop do
 			puts "help selected"
 		
 		when /quit/
+			return true if usrArr[1] = '-a'
 			break
 			
 		when /param/
@@ -50,6 +53,7 @@ loop do
 			
 			case method				
 				when /1/
+					len += 1
 					len.times do |i|
 						maxN = 0
 						for item in list
@@ -133,4 +137,6 @@ loop do
 			
 	end
 	puts ""
+end
+
 end

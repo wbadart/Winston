@@ -1,4 +1,7 @@
 require_relative 'classes'
+require_relative 'dictConsole'
+require_relative 'wordAnalytics'
+require_relative 'synth'
 f = 'sentences'
 
 
@@ -82,20 +85,20 @@ loop do
 			
 		when /dict/
 			puts "Loading Dictionary Control Console..."
-			require_relative 'dictConsole'
+			killBool = dictConsole
 			puts ""
 			puts "Loading Sentence Command Console..."
 			puts welcome
 			
 		when /data/
 			puts "Loading Data Analytics Console..."
-			require_relative 'wordAnalytics'
+			killBool = wordAnalytics
 			puts "Loading Sentence Command Console..."
 			puts welcome
 			
 		when /synth/
 			puts "Loading Sentence Synthesizer..."
-			require_relative 'synth'
+			killBool = synth
 			puts "Loading Sentence Command Console..."
 			puts welcome
 			
@@ -152,5 +155,9 @@ loop do
 			
 	end
 	puts ""
+	if killBool
+		puts "\e[H\e[2J"
+		break
+	end
 end
 	
