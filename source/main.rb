@@ -2,7 +2,7 @@ require_relative 'classes'
 require_relative 'dictConsole'
 require_relative 'wordAnalytics'
 require_relative 'synth'
-f = 'sentences'
+f = 'sentences.txt'
 
 
 welcome = "\nWelcome to the Sentence Command Console.  Please enter 'help' for a list of availible commands.\n"
@@ -14,6 +14,7 @@ commands = {
 	batch: "Input batch of sentences.",
 	clear: "Clears the terminal window.",
 	dict: "Enter the Dictionary Control Console.",
+	error: "Lists possible errors.\n    Use 'log' argument to print error log.",
 	help: "List all availible commands.",
 	intro: "Reprints the welcome message.",
 	list: "Lists all sentences in the database.\n    Use '-a' argument to also list data.",
@@ -42,7 +43,7 @@ loop do
 		
 		when /help/
 			puts "Availible commands:"
-			commands.each{|k, v| puts "#{k}: #{v}"}
+			commands.each{|k, v| puts "-#{k.to_s}: #{v}"}
 			
 		when /intro/
 			puts welcome
@@ -52,18 +53,18 @@ loop do
 			if numIn == 1
 				list.each{|i| puts "\n#{i.string}"}
 			elsif usrArr[1] == "-a"
+				n = 0
 				list.each do |i|
+					puts "==========[#{n}]=========="
 					puts i.string
 					d = i.data
-					d.each do |k, v|
-						if v.is_a? Array
-							puts "#{k} (Array)":
-							v.each{|m| puts "[#{m}]: #{v}"}
-						else
-							puts "#{k}: #{v}"
-						end
+					puts "Punctuation: #{d[:punct]}"
+					print "Words:       "
+					d[:words].each do |word|
+						print "#{word.string} "
 					end
-					print "\n\n\n"
+					print "\nLength:      #{d[:length]}\n"
+					puts
 				end
 			end
 			
@@ -71,14 +72,18 @@ loop do
 			puts "\e[H\e[2J"
 
 		when /error/
-			if usrArr[1] == "log"
-				$log.each do |s|
-					puts "Error ##{s[0]} @ #{s[1]}:"
-					puts $errors[s[0]]
-					puts ""
+			if numIn == 2
+				if usrArr[1] == "log"
+					$log.each do |s|
+						puts "Error ##{s[0]} @ #{s[1]}:"
+						puts $errors[s[0]]
+						puts ""
+					end
+				else
+					$errors.each{|e, s| puts "#{e}: #{s}"}
 				end
 			else
-				$errors.each{|e, s| puts "#{e}: #{s}"}
+					$errors.each{|e, s| puts "#{e}: #{s}"}
 			end
 			
 		#===Console navigation functions===#
@@ -138,16 +143,17 @@ loop do
 			print  "[batch]>> "
 			str = gets("\t\n").chomp.strip
 
-			list = load("sentences")
+			list = load("sentences.txt")
+			str.gsub!(//, )
 			str.gsub!(/[^a-zA-Z\s.!?"]/, "")
-				puts str.split(".")
-				str2 = str.split(".")
+			str2 = str.split(".")
 			
 			str2.each do |sent|
 				sent[sent.length] = "."
 				sent = sent.strip
+				puts sent
 				n = add(Sentence.new(sent), list)
-				save(n, 'sentences')
+				save(n, 'sentences.txt')
 			end
 		
 		else

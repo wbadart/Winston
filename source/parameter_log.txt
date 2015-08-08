@@ -1,0 +1,3 @@
+[{	:
+modeWf0.2:	lenWf0.0005:randmini
+:randmaxi

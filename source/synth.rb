@@ -1,7 +1,7 @@
 def synth
 
 require_relative 'classes'
-f = ['dictionary', 'sentences']
+f = ['dictionary.txt', 'sentences.txt', 'parameter_log.txt']
 puts "\nWelcome to the Sentence Synthesizer.  Type 'quit' at any time to leave. First input is sentence length. Second is method. Method 1 uses a simple mode analysis and Method 2 uses score generation with chaos."
 puts ""
 
@@ -23,14 +23,14 @@ loop do
 	usrIn = gets.chomp.strip.downcase
 	usrArr = usrIn.split(" ")
 	numIn = usrArr.length
-	$paramLog = load('parameter_log')
+	$paramLog = load(f[2])
 	
 	case usrArr[0]
 		when /help/
 			puts "help selected"
 		
 		when /quit/
-			return true if usrArr[1] = '-a'
+			return true if usrArr[1] == '-a'
 			break
 			
 		when /param/
@@ -78,7 +78,7 @@ loop do
 						print "\nFrequency advantage (0-100): "
 						lenW = gets.chomp.strip.to_i / 100000
 						print "\nRandom min(0-100): "
-						randmin = gets.chomp.strip.to_i / 10
+						randmin = gets.chomp.strip.to_i
 						print "\nRandom max (0-100): "
 						randmax = gets.chomp.strip.to_i
 						params = {

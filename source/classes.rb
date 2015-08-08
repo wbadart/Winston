@@ -8,58 +8,7 @@ $errors = {
 }
 
 
-class CustomObj
-	attr_accessor :data, :string
-	
-end
 
-class Word < CustomObj
-	def initialize(string, *pos)
-		puts pos
-		@data = []
-		@string = string
-		if pos.is_a? Array
-			puts "New word took integer"
-			@data[0] = pos[0]
-		else
-			puts "You gave me something else!"
-		end
-	end
-end
-
-class Sentence < CustomObj
-	def initialize(string)
-		@string = string
-		@data = Hash.new
-		@data[:punct] = string.to_s.chop
-		str = string.to_s[0...-1]
-		str.tr!(",", "")
-		str = str.downcase.split(" ")
-
-		words = []
-		n = 0
-		str.each do |word|
-			dict = load('dictionary')
-			i = exists?(word, dict, "find")
-			puts "word:#{word}, i:#{i}"
-			if i == false
-				data = Word.new(word, n.to_i)
-				puts data.string
-				newList = add(data, dict)
-				save(newList, 'dictionary')
-			else
-				dict[i].data.push(n)
-				data = dict[i]
-				save(dict, 'dictionary')
-			end
-			words.push(data)
-			n += 1
-		end
-		@data[:words] = words
-		@data[:length] = words.length
-	end
-
-end
 
 
 #====Searches for an item in a list.====#
@@ -187,12 +136,14 @@ end
 
 #==Saves data (var) to file (file)==#
 def save(var, file)
-	File.open(file, 'w') {|f| f.write(Marshal.dump(var))}
+	dat = Marshal.dump(var)
+	IO.binwrite(file, dat)
 end
 
 #==Loads and unserializes data from file (f)==#
-def load(f)
-	Marshal.load File.read(f)
+def load(file)
+	dat = IO.binread(file)
+	return Marshal.load(dat)
 end
 
 
@@ -234,4 +185,49 @@ def max(set, *method)
 		max = n if n > max
 	end
 	return max
+end
+
+#================Custom Classes===============================#
+
+class CustomObj
+	attr_accessor :data, :string
+end
+
+class Word < CustomObj
+	def initialize(string, *pos)
+		@data = []
+		@string = string
+		@data[0] = pos[0] if pos.is_a? Array
+	end
+end
+
+class Sentence < CustomObj
+	def initialize(string)
+		@string = string
+		@data = Hash.new
+		@data[:punct] = string.to_s[string.to_s.length - 1]
+		str = string.to_s[0...-1]
+		str.tr!(",", "")
+		str = str.downcase.split(" ")
+
+		words = []
+		n = 0
+		str.each do |word|
+			dict = load('dictionary.txt')
+			i = exists?(word, dict, "find")
+			if i == false
+				data = Word.new(word, n.to_i)
+				dict = add(data, dict)
+			else
+				dict[i].data.push(n)
+				data = dict[i]
+			end
+			save(dict, 'dictionary.txt')
+			words.push(data)
+			n += 1
+		end
+		@data[:words] = words
+		@data[:length] = words.length
+	end
+
 end

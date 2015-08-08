@@ -1,7 +1,7 @@
 def dictConsole
 
 require_relative 'classes'
-f = 'dictionary'
+f = 'dictionary.txt'
 log = []
 
 welcome = "\nWelcome to the Dictionary Control Console.  Here, you can add, delete,  and modify entries in the dictionary data file.  Enter 'help' at any time for a list of availible commands."
@@ -18,7 +18,7 @@ commands = {
 	list: "Prints dictionary.",
 	search: "Finds data associated with word.",
 	sort: "Alphabetizes the dictionary.",
-	quit: "Exit the program."
+	quit: "Exit to main terminal.\n    Use '-a' argument to quit the program entirely."
 }
 
 errors = {
@@ -32,12 +32,6 @@ errors = {
 loop do
 	print ">> "
 	usrIn = gets.chomp.strip.downcase
-	if usrIn == "init"
-		print "First word: "
-		str = gets.chomp.downcase
-		puts ""
-		save([Word.new(str, nil)], f)
-	end
 	dict = load(f)
 	
 	usrArr = usrIn.split(" ")
@@ -177,7 +171,7 @@ loop do
 			
 		#===A winner don't never quit===#
 		when /quit/
-			return true if usrArr[1] = '-a'
+			return true if usrArr[1] == '-a'
 			break
 			
 		else

@@ -6,7 +6,7 @@ puts "\nData Analytics Console. Enter 'help' to get started."
 puts ""
 
 loop do
-	list = load('dictionary')
+	list = load('dictionary.txt')
 	print "[data]>> "
 	usrIn = gets.chomp.strip.downcase
 	usrArr = usrIn.split(" ")
@@ -37,7 +37,7 @@ loop do
 			end
 			
 		when /quit/
-			return true if usrArr[1] = '-a'
+			return true if usrArr[1] == '-a'
 			break
 			
 		else
